@@ -9,7 +9,7 @@ export class TaskController {
     static async createTask(req: Request, res: Response): Promise<any> {
         try {
             const { title, description, user_creation } = req.body;
-            const taskinfo = await taskService.createTask({ title, description, user_creation, status: 1 });
+            const taskinfo = await taskService.createTask({ title, description, user_creation, status: 0 });
 
             return res.status(200).json({
                 value: taskinfo, status: true, error: ""
@@ -71,7 +71,7 @@ export class TaskController {
 
     static async deleteTask(req: Request, res: Response): Promise<any> {
         try {
-            const id = req.query.id as string;
+            const id = req.params.taskId as string;
             await taskService.deleteTask(id);
             return res.status(200).json({ value: "Task deleted", status: true, error: "" });
 

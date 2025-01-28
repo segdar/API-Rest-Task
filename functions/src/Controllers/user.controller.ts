@@ -9,7 +9,7 @@ export class UserController {
         try {
             const email = req.params.email as string;
             const infouser = await userService.getUser(email);
-            console.log("test", email);
+
             if (infouser === null) {
                 return res.status(200).json({value:"", status:false, error:""}); 
             }

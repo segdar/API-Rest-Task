@@ -1,5 +1,7 @@
+import { Timestamp } from "firebase-admin/firestore";
 import { Task } from "../Models/taks.model";
 import db from "../config/dbnote.config";
+
 
 
 export class TaskService {
@@ -7,7 +9,10 @@ export class TaskService {
 	private collection = db.collection('task');
 
 	async createTask(data: Omit<Task, 'id' | 'date_creation' >): Promise<string> {
-		const task = await this.collection.add(data);
+		const task = await this.collection.add({
+			...data,
+			date_creation: Timestamp.now()
+		});
 		return task.id;
 	}
 
@@ -20,7 +25,7 @@ export class TaskService {
 	async getAllTasks(): Promise<Task[]> {
 
 		const tasks = await this.collection.get();
-		return tasks.docs.map((task) => ({ id: task.id, ...task.data() } as Task));
+		return tasks.docs.map((task) => ({ ...task.data(),id: task.id, date_creation: task.data().date_creation.toDate() } as Task));
 		
 	}
 
